@@ -7,10 +7,13 @@ const __dirname = path.resolve();
 export default class MainController {
   static async transformToJson(req, res) {
     const { brand, pattern, color } = req.params;
+
+    console.log(`Brand: ${brand}, Pattern: ${pattern}, Color: ${color}`);
+
     try {
       const file = fs
         .readdirSync(path.join(__dirname, 'uploads'))
-        .find((file) => file.endsWith('.csv'));
+        .find((file) => file.endsWith('brands-images-name.csv'));
 
       const filePath = path.join(__dirname, 'uploads', file);
 
@@ -18,6 +21,20 @@ export default class MainController {
         noheader: false,
         delimiter: ';',
       }).fromFile(filePath);
+
+      const materialExists = jsonArray.find((product) => {
+        return (
+          product.brand === brand &&
+          product.pattern === pattern &&
+          product.color === color
+        );
+      });
+
+      if (!materialExists) {
+        console.log('Material not found');
+        res.status(404).json({ message: 'No images found for this material' });
+        return;
+      }
 
       jsonArray.forEach((product) => {
         product['images_name'] = [];

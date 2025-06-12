@@ -7,6 +7,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="product/:brand/:pattern/:color" element={<ImageGrid />} />
+        <Route path="/" element={<ImageGrid />} />
       </Routes>
     </Router>
   );
