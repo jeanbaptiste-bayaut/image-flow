@@ -53,7 +53,6 @@ function ImageGrid() {
       .toLowerCase()}`;
 
     console.log(`Fetching images for URL: ${url}`);
-    console.log(products[index]);
 
     const result = await axios.get(`http://localhost:8080/api/images/${url}`);
 
@@ -157,12 +156,13 @@ function ImageGrid() {
           </div>
         </div>
       )}
-      {isOpen && (
+      {isOpen && products[index].material && (
         <Modal
           setIsOpen={setIsOpen}
           isOpen={isOpen}
           index={index}
           setIndex={setIndex}
+          material={products[index].material}
         />
       )}
     </>

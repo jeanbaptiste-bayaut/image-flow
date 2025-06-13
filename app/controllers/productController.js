@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import csv2json from 'csvtojson';
+import { log } from 'console';
 
 export default class ProductController {
   static async getProductByBrand(req, res) {
@@ -23,8 +24,6 @@ export default class ProductController {
         (row) => row.brand == brand && row.status !== 'true'
       );
 
-      console.log('Found products:', productsByBrand.length);
-
       res.json(productsByBrand);
     } catch (error) {
       console.error(error); // Re-throw the error to be caught by the catch block
@@ -34,6 +33,10 @@ export default class ProductController {
 
   static async updateProduct(req, res) {
     const { material, comment, noimages } = req.body;
+
+    if (!material) {
+      return res.status(400).json({ message: 'Material is required' });
+    }
 
     try {
       const __dirname = path.resolve();
@@ -67,15 +70,23 @@ export default class ProductController {
         if (row.material.toLowerCase() === material.toLowerCase()) {
           return {
             ...row,
+            composition: `"${productToEdit[0].composition}"`,
+            characteristics: `"${productToEdit[0].characteristics}"`,
             comment: productToEdit[0].comment || row.comment,
             noimages: productToEdit[0].noimages || row.noimages,
           };
         }
-        return row;
+
+        return {
+          ...row,
+          composition: `"${productToEdit[0].composition}"`,
+          characteristics: `"${productToEdit[0].characteristics}"`,
+        };
       });
 
       const headers =
         'material;season;brand;style;name;characteristics;composition;gender;department;category;type;site;noimages;comment;status';
+
       const csvContent = updatedCsv
         .map((row) => Object.values(row).join(';'))
         .join('\n');
