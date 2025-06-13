@@ -101,10 +101,12 @@ function Nav({
   }
 
   return (
-    <>
+    <div className="nav-container">
       <form className="nav-form" onSubmit={(e) => handleSubmit(e)}>
         <select
           className="nav-select"
+          name="brand"
+          id="brand"
           value={selectedBrand}
           onChange={(e) => setSelectedBrand(e.target.value)}
         >
@@ -121,13 +123,18 @@ function Nav({
         </button>
       </form>
       {selectedBrand && products.length > 0 && (
-        <>
+        <div className="nav-info">
           <h2>
             Products for {selectedBrand} - {index + 1} / {products.length}
           </h2>
           <h3>
             {products[index].material} - {products[index].name}
           </h3>
+          <small>
+            {products[index].department} {products[index].category}{' '}
+            {products[index].type}
+          </small>
+          <br />
           <small style={{ fontWeight: 'bold' }}>Characteristics</small>
           {products[index].characteristics && (
             <span
@@ -154,6 +161,7 @@ function Nav({
             Prev
           </button> */}
           <button
+            className="button-next"
             onClick={() => {
               updateStatus();
             }}
@@ -161,10 +169,12 @@ function Nav({
           >
             Next
           </button>
-          <button onClick={() => setIsOpen(true)}>Add Comment</button>
-        </>
+          <button className="button-comment" onClick={() => setIsOpen(true)}>
+            Add Comment
+          </button>
+        </div>
       )}
-    </>
+    </div>
   );
 }
 

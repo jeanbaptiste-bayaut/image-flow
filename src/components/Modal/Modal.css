@@ -21,6 +21,7 @@
 .modal-form {
   display: flex;
   flex-direction: column;
+  gap: 1em;
 }
 
 .close-button {

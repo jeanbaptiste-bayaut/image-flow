@@ -8,8 +8,6 @@ export default class MainController {
   static async transformToJson(req, res) {
     const { brand, pattern, color } = req.params;
 
-    console.log(`Brand: ${brand}, Pattern: ${pattern}, Color: ${color}`);
-
     try {
       const file = fs
         .readdirSync(path.join(__dirname, 'uploads'))
@@ -62,8 +60,6 @@ export default class MainController {
           product.color === color
         );
       });
-
-      console.log(productInfos);
 
       res.json(productInfos);
     } catch (error) {

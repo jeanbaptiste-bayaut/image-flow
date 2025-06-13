@@ -7,9 +7,10 @@ type ModalProps = {
   setIsOpen: (isOpen: boolean) => void;
   index: number;
   setIndex: (index: number | ((prevIndex: number) => number)) => void;
+  material: string;
 };
 
-function Modal({ setIsOpen, index, setIndex }: ModalProps) {
+function Modal({ setIsOpen, index, setIndex, material }: ModalProps) {
   const handleClose = () => setIsOpen(false);
   const [formData, setFormData] = useState({
     material: '',
@@ -25,7 +26,7 @@ function Modal({ setIsOpen, index, setIndex }: ModalProps) {
       const response = await axios.patch(
         `${import.meta.env.VITE_API_URL}/products`,
         {
-          material: formData.material,
+          material: material,
           noimages: formData.noimages,
           comment: formData.comment,
         }
@@ -38,6 +39,7 @@ function Modal({ setIsOpen, index, setIndex }: ModalProps) {
       }
     } catch (error) {
       console.error('Error updating product:', error);
+      throw new Error('Failed to update product');
     }
   };
 

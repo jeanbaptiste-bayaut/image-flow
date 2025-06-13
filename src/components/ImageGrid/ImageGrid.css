@@ -33,3 +33,36 @@
   justify-content: center;
   align-items: center;
 }
+
+button {
+  cursor: pointer;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(0, 0, 0);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  padding: 5px 10px;
+}
+
+button:hover {
+  background-color: rgb(200, 200, 200);
+}
+
+form select {
+  padding: 5px;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+.nav-container .nav-info {
+  padding-left: 2em;
+}
+
+.nav-form {
+  display: flex;
+  gap: 10px;
+  background-color: rgb(138, 196, 202);
+  height: 4vh;
+  padding: 1em 2em;
+}
+
+.button-next {
+  margin-right: 10px;
+}
