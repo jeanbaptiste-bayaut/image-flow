@@ -3,7 +3,6 @@ import express from 'express';
 import { createServer } from 'http';
 import MainController from './app/controllers/mainController.js';
 import ProductController from './app/controllers/productController.js';
-import { analyzeImage } from './app/controllers/mistralAI/apiController.js';
 import path from 'path';
 import cors from 'cors';
 
@@ -24,10 +23,6 @@ app.get('/', (req, res) => {
   MainController.transformToJson(req, res);
 
   res.sendFile(path.join(__dirname, './dist', 'index.html'));
-});
-
-app.get('/api/analyze', (req, res) => {
-  analyzeImage(req, res);
 });
 
 app.get('/api/products/:brand', (req, res) => {

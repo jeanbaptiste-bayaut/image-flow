@@ -83,6 +83,7 @@ function ImageGrid() {
 
       getImages();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, products]);
 
   return (
