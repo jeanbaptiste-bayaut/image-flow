@@ -44,7 +44,7 @@ app.patch('/api/products', (req, res) => {
   ProductController.updateProduct(req, res);
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 httpServer.listen(PORT, () => {
   console.log(`Server launched at http://localhost:${PORT}`);
