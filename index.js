@@ -9,7 +9,11 @@ import cors from 'cors';
 const app = express();
 const __dirname = path.resolve();
 const corsOptions = {
-  origin: ['http://localhost:5173', 'http://localhost:6464'],
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:6464',
+    'https://image-control.onrender.com',
+  ],
 };
 
 app.use(express.json());

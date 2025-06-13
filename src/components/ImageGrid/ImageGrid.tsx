@@ -54,7 +54,9 @@ function ImageGrid() {
 
     console.log(`Fetching images for URL: ${url}`);
 
-    const result = await axios.get(`http://localhost:8080/api/images/${url}`);
+    const result = await axios.get(
+      `${import.meta.env.VITE_API_URL}/images/${url}`
+    );
 
     if (!result.data) {
       console.log('No images found');
