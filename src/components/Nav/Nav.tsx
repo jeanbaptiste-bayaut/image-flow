@@ -121,6 +121,10 @@ function Nav({
         <button className="nav-button" type="submit">
           Submit
         </button>
+
+        <button className="button-download">
+          <a href={`${import.meta.env.VITE_API_URL}/download`}>Download File</a>
+        </button>
       </form>
       {selectedBrand && products.length > 0 && (
         <div className="nav-info">
@@ -151,15 +155,6 @@ function Nav({
               }}
             />
           ) : null}
-          {/* <button
-            onClick={() => {
-              setIndex((prev) => (prev > 0 ? prev - 1 : 0));
-              getImages();
-            }}
-            disabled={index === 0}
-          >
-            Prev
-          </button> */}
           <button
             className="button-next"
             onClick={() => {

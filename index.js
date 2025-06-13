@@ -44,6 +44,11 @@ app.patch('/api/products', (req, res) => {
   ProductController.updateProduct(req, res);
 });
 
+app.get('/api/download', (req, res) => {
+  const file = `${__dirname}/uploads/products-253-254.csv`;
+  res.download(file);
+});
+
 const PORT = process.env.PORT || 8080;
 
 httpServer.listen(PORT, () => {
