@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import csv2json from 'csvtojson';
-import { log } from 'console';
+import { Parser } from 'json2csv';
 
 export default class ProductController {
   static async getProductByBrand(req, res) {
@@ -51,58 +51,67 @@ export default class ProductController {
         delimiter: ';',
       }).fromFile(filePath);
 
-      const productToEdit = jsonArray.filter(
-        (row) => row.material.toLowerCase() == material.toLowerCase()
+      const productToEdit = jsonArray.find(
+        (row) => row.material.toLowerCase() === material.toLowerCase()
       );
 
-      if (comment) {
-        productToEdit[0].comment = comment;
+      if (!productToEdit) {
+        return res.status(404).json({ message: 'Product not found' });
       }
 
-      if (noimages) {
-        productToEdit[0].noimages = noimages;
-      }
+      if (comment) productToEdit.comment = comment;
 
-      productToEdit[0].status = 'true';
+      if (noimages) productToEdit.noimages = noimages;
 
-      // Save the updated product back to the CSV file
-      const updatedCsv = jsonArray.map((row) => {
-        if (row.material.toLowerCase() === material.toLowerCase()) {
-          return {
-            ...row,
-            composition: `"${productToEdit[0].composition}"`,
-            characteristics: `"${productToEdit[0].characteristics}"`,
-            comment: productToEdit[0].comment || row.comment,
-            noimages: productToEdit[0].noimages || row.noimages,
-          };
-        }
+      productToEdit.status = 'true';
 
-        return {
-          ...row,
-          composition: `"${productToEdit[0].composition}"`,
-          characteristics: `"${productToEdit[0].characteristics}"`,
-        };
-      });
+      // // Save the updated product back to the CSV file
+      // const updatedCsv = jsonArray.map((row) => {
+      //   if (row.material.toLowerCase() === material.toLowerCase()) {
+      //     return {
+      //       ...row,
+      //       // composition: `${productToEdit[0].composition}`,
+      //       // characteristics: `${productToEdit[0].characteristics}`,
+      //       comment: productToEdit[0].comment || row.comment,
+      //       noimages: productToEdit[0].noimages || row.noimages,
+      //     };
+      //   }
 
-      const headers =
-        'material;season;brand;style;name;characteristics;composition;gender;department;category;type;site;noimages;comment;status';
+      //   return {
+      //     ...row,
+      //     // composition: `${productToEdit[0].composition}`,
+      //     // characteristics: `${productToEdit[0].characteristics}`,
+      //   };
+      // });
 
-      const csvContent = updatedCsv
-        .map((row) => Object.values(row).join(';'))
-        .join('\n');
+      // Rebuild CSV using json2csv
+      const fields = [
+        'material',
+        'season',
+        'brand',
+        'style',
+        'name',
+        'characteristics',
+        'composition',
+        'gender',
+        'department',
+        'category',
+        'type',
+        'site',
+        'noimages',
+        'comment',
+        'status',
+      ];
 
-      // Add headers to the CSV content
-      const headerRow = headers + '\n';
-      const csvContentWithHeaders = headerRow + csvContent;
+      const parser = new Parser({ fields, delimiter: ';', quote: '"' });
+      const csv = parser.parse(jsonArray);
 
-      // Write the updated CSV content back to the file
-      fs.writeFileSync(filePath, csvContentWithHeaders, 'utf8');
-      console.log('Product updated successfully');
-      // Return the updated product information
+      // Write to file
+      fs.writeFileSync(filePath, csv, 'utf8');
 
       res.json({
         message: 'Product updated successfully',
-        product: productToEdit[0],
+        product: productToEdit,
       });
     } catch (error) {
       console.error(error); // Re-throw the error to be caught by the catch block
